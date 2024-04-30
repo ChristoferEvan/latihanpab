@@ -1,7 +1,8 @@
 
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
+import 'package:notes/services/note_service.dart';
 
 class NoteListScreen extends StatefulWidget {
   const NoteListScreen({super.key});
@@ -60,17 +61,20 @@ class _NoteListScreenState extends State<NoteListScreen> {
                  ElevatedButton(
                 onPressed: () {
                 //  Map<String, dynamic> newNote = new Map<String,dynamic>();
-                 Map<String, dynamic> newNote = {};
-                 newNote['title']=_titleController.text;
-                 newNote['description']=_descriptionController.text;
+                //  Map<String, dynamic> newNote = {};
+                //  newNote['title']=_titleController.text;
+                //  newNote['description']=_descriptionController.text;
 
-                 FirebaseFirestore.instance
-                    .collection('notes')
-                    .add(newNote)
-                    .whenComplete(() {
-                      Navigator.of(context).pop();
-                    },
-                    );
+                 NoteService.addNote(_titleController.text, _descriptionController.text)
+                 .whenComplete(() => Navigator.of(context).pop());
+
+                //  FirebaseFirestore.instance
+                //     .collection('notes')
+                //     .add(newNote)
+                //     .whenComplete(() {
+                //       Navigator.of(context).pop();
+                //     },
+                    // );
                     _titleController.clear();
                     _descriptionController.clear();
                 },
@@ -102,7 +106,7 @@ class _NoteListState extends State<NoteList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('notes').snapshots(), 
+      stream: NoteService.retrieveNotes().asStream(), 
       builder: (context,snapshot){
         if(snapshot.hasError){
           return new Text('Error: ${snapshot.error}');
@@ -164,18 +168,22 @@ TextEditingController descriptionController=TextEditingController(text: document
                  ElevatedButton(
                 onPressed: () {
                 //  Map<String, dynamic> newNote = new Map<String,dynamic>();
-                 Map<String, dynamic> updateNote = {};
-                 updateNote['title']=titleController.text;
-                 updateNote['description']=descriptionController.text;
+                //  Map<String, dynamic> updateNote = {};
+                //  updateNote['title']=titleController.text;
+                //  updateNote['description']=descriptionController.text;
 
-                 FirebaseFirestore.instance
-                    .collection('notes')
-                    .doc(document.id)
-                    .update(updateNote)
-                    .whenComplete(() {
-                      Navigator.of(context).pop();
-                    },
-                    );
+                //  FirebaseFirestore.instance
+                //     .collection('notes')
+                //     .doc(document.id)
+                //     .update(updateNote)
+                //     .whenComplete(() {
+                //       Navigator.of(context).pop();
+                //     },
+                //     );
+
+                NoteService.updateNote(document.id,titleController.text, descriptionController.text)
+                 .whenComplete(() => Navigator.of(context).pop());
+
                     titleController.clear();
                     descriptionController.clear();
                    
@@ -214,14 +222,16 @@ TextEditingController descriptionController=TextEditingController(text: document
                                      //  Map<String, dynamic> newNote = new Map<String,dynamic>();
                                     
                      
-                      FirebaseFirestore.instance
-                      .collection('notes')
-                      .doc(document.id)
-                      .delete()
-                      .catchError((e){
-                        print(e);
-                      });
-                       Navigator.of(context).pop();
+                      // FirebaseFirestore.instance
+                      // .collection('notes')
+                      // .doc(document.id)
+                      // .delete()
+                      // .catchError((e){
+                      //   print(e);
+                      // });
+                      //  Navigator.of(context).pop();
+
+                      NoteService.deleteNote(document.id);
                                      
                       
                       
