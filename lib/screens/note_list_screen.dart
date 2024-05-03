@@ -66,7 +66,11 @@ class _NoteListScreenState extends State<NoteListScreen> {
                 //  newNote['description']=_descriptionController.text;
 
                  NoteService.addNote(_titleController.text, _descriptionController.text)
-                 .whenComplete(() => Navigator.of(context).pop());
+                 .whenComplete(() {
+                    Navigator.of(context).pop();
+                    _titleController.clear();
+                    _descriptionController.clear();
+                 } );
 
                 //  FirebaseFirestore.instance
                 //     .collection('notes')
@@ -75,8 +79,6 @@ class _NoteListScreenState extends State<NoteListScreen> {
                 //       Navigator.of(context).pop();
                 //     },
                     // );
-                    _titleController.clear();
-                    _descriptionController.clear();
                 },
                  child: const Text('Save')),
                  
@@ -182,10 +184,12 @@ TextEditingController descriptionController=TextEditingController(text: document
                 //     );
 
                 NoteService.updateNote(document.id,titleController.text, descriptionController.text)
-                 .whenComplete(() => Navigator.of(context).pop());
-
+                 .whenComplete(() {
+                  Navigator.of(context).pop();
                     titleController.clear();
                     descriptionController.clear();
+                 } );
+
                    
                 },
                  child: const Text('Update')),
