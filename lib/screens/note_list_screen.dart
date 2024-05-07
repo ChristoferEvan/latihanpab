@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:notes/services/note_service.dart';
 import 'package:notes/widgets/note_dialog.dart';
 
+
 class NoteListScreen extends StatefulWidget {
   const NoteListScreen({super.key});
+
 
   @override
   State<NoteListScreen> createState() => _NoteListScreenState();
 }
+
 
 class _NoteListScreenState extends State<NoteListScreen> {
   @override
@@ -20,10 +23,11 @@ class _NoteListScreenState extends State<NoteListScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
-              context: context,
-              builder: (context) {
-                return NoteDialog();
-              });
+            context: context,
+            builder: (context) {
+              return NoteDialog();
+            },
+          );
         },
         tooltip: 'Add Note',
         child: const Icon(Icons.add),
@@ -32,14 +36,11 @@ class _NoteListScreenState extends State<NoteListScreen> {
   }
 }
 
-class NoteList extends StatefulWidget {
+
+class NoteList extends StatelessWidget {
   const NoteList({super.key});
 
-  @override
-  State<NoteList> createState() => _NoteListState();
-}
 
-class _NoteListState extends State<NoteList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -58,62 +59,28 @@ class _NoteListState extends State<NoteList> {
               padding: const EdgeInsets.only(bottom: 80),
               children: snapshot.data!.map((document) {
                 return Card(
-                    child: ListTile(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return NoteDialog(note: document);
-                      },
-                    );
-                  },
-                  title: Text(document['title']),
-                  subtitle: Text(document['description']),
-                  trailing: InkWell(
+                  child: ListTile(
                     onTap: () {
                       showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Update Notes'),
-                              content: const Text(
-                                  'Apakah anda yakin ingin menghapus data?'),
-                              actions: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0),
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('No')),
-                                ),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      //  Map<String, dynamic> newNote = new Map<String,dynamic>();
-
-                                      // FirebaseFirestore.instance
-                                      // .collection('notes')
-                                      // .doc(document.id)
-                                      // .delete()
-                                      // .catchError((e){
-                                      //   print(e);
-                                      // });
-                                      //  Navigator.of(context).pop();
-
-                                      NoteService.deleteNote(document['id']);
-                                    },
-                                    child: const Text('Yes')),
-                              ],
-                            );
-                          });
+                        context: context,
+                        builder: (context) {
+                          return NoteDialog(note: document);
+                        },
+                      );
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Icon(Icons.delete),
+                    title: Text(document.title),
+                    subtitle: Text(document.description),
+                    trailing: InkWell(
+                      onTap: () {
+                        NoteService.deleteNote(document);
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Icon(Icons.delete),
+                      ),
                     ),
                   ),
-                ));
+                );
               }).toList(),
             );
         }
