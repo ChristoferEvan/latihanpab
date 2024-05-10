@@ -68,6 +68,14 @@ class NoteList extends StatelessWidget {
                         },
                       );
                     },
+                    leading: document.imageUrl != null
+                    ? CircleAvatar(
+                      backgroundImage: NetworkImage(document.imageUrl!),
+                    )
+                    :const CircleAvatar(
+                      backgroundColor: Colors.grey,
+                      child: Icon(Icons.image),
+                    ),
                     title: Text(document.title),
                     subtitle: Text(document.description),
                     trailing: InkWell(
