@@ -22,7 +22,7 @@ class NoteDialog extends StatefulWidget {
 class _NoteDialogState extends State<NoteDialog> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  File? _imageFile;
+  XFile? _imageFile;
   Position? _currentPosition;
   // String? _currentAddress;
 
@@ -42,7 +42,7 @@ class _NoteDialogState extends State<NoteDialog> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _imageFile = File(pickedFile.path);
+        _imageFile = XFile(pickedFile.path);
       });
     }
   }
